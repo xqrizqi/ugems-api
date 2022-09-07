@@ -4,7 +4,7 @@ services:
     web_api:
         build: .
         ports:
-            - "8181:8181"
+            - "6698:6698"
         depends_on:
             - redis
         environment:
@@ -14,7 +14,7 @@ services:
             - POSTGRES_PORT=5432
             - POSTGRES_USER=postgres
             - POSTGRES_PASS=P@ssw0rd9901
-            - POSTGRES_DB=postgres
+            - POSTGRES_DB=dashboard-dev
             - HDFS_HOST=10.12.51.6
             - HDFS_PORT=9870
             - HDFS_USER=ann
