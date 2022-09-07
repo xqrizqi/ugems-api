@@ -2,15 +2,28 @@ import redis
 import jwt
 import hashlib
 import psycopg2
+import os
+import json
+
+redis_host = os.environ['REDIS_HOST']
+redis_port = os.environ['REDIS_PORT']
+postgres_host = os.environ['POSTGRES_HOST']
+postgres_port = os.environ['POSTGRES_PORT']
+postgres_user = os.environ['POSTGRES_USER']
+postgres_pass = os.environ['POSTGRES_PASS']
+postgres_db = os.environ['POSTGRES_DB']
+hdfs_host = os.environ['HDFS_HOST']
+hdfs_port = os.environ['HDFS_PORT']
+hdfs_user = os.environ['HDFS_USER']
 
 
-r = redis.StrictRedis(host='redis', port=6379, db=0)
+r = redis.StrictRedis(host=redis_host, port=redis_port, db=0)
 
 def create_token(user):
     token = jwt.encode(user, 'secret-ugems', algorithm='HS256')
     pipe = r.pipeline()
     pipe.hmset('/t/'+token, user)
-    pipe.expire('/t/'+token, 2592000)
+    pipe.expire('/t/'+token, 86400)
     pipe.execute()
     return token
 
@@ -18,10 +31,10 @@ def validate_token(token):
     print ('/t/'+token)
     pipe = r.pipeline()
     res = pipe.hgetall('/t/'+token).execute()
-    return res
-    # if len(res[0]) != 0:
-    #     return json.dumps(res[0])
-    # return False
+    #return res
+    if len(res[0]) != 0:
+        return res
+    return False
 
 def invalidate_token(token):
     pipe = r.pipeline()
@@ -36,7 +49,7 @@ def validate_user(credential):
     user = credential['user']
     passwd = credential['pass']
 
-    conn = psycopg2.connect(database = "ugems_api", user = "postgres", password = "secret", host = "172.168.21.78", port = "5432")
+    conn = psycopg2.connect(database = postgres_db, user = postgres_user, password = postgres_pass, host = postgres_host, port = postgres_port)
     print ("Opened database successfully")
     print(conn)
 

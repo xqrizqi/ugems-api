@@ -7,5 +7,17 @@ services:
             - "8181:8181"
         depends_on:
             - redis
+        environment:
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+            - POSTGRES_HOST=10.87.0.2
+            - POSTGRES_PORT=5432
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASS=P@ssw0rd9901
+            - POSTGRES_DB=postgres
+            - HDFS_HOST=10.12.51.6
+            - HDFS_PORT=9870
+            - HDFS_USER=ann
+            - SERVICE_PORT=6698
     redis:
         image: "redis:alpine"
