@@ -54,7 +54,7 @@ def validate_user(credential):
     print(conn)
 
     cur = conn.cursor()
-    cur.execute("SELECT id, username,password  from api_user where username='"+user+"' and password='"+passwd+"'")
+    cur.execute("SELECT id, username,password  from public.api_gps_user where username='"+user+"' and password='"+passwd+"'")
 
     rows = cur.fetchall()
     if (len(rows)>0):
